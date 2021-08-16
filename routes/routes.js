@@ -3,7 +3,7 @@ const router = express.Router()
 const User = require('../models/user')
 const Exercise = require('../models/exercise')
 const Todo = require('../models/todo')
-const todo = require('../models/todo')
+const Mail = require('../models/mail')
 const bcrypt = require('bcrypt')
 
 router.post('/signup', async (request, response) =>{
@@ -52,6 +52,7 @@ router.get('/users/', async (request,response) =>{
 })
 
 //------Exercise Section-------
+//Create exercises
 
 router.post('/exercise', async (request, response) =>{
     console.log(request.body)
@@ -64,7 +65,7 @@ router.post('/exercise', async (request, response) =>{
     }
 })
 
-//READ EXERCISE (get all users)
+//Read all exercises of the users)
 
 router.get('/exercises', async (request, response) =>{
     try {
@@ -76,39 +77,44 @@ router.get('/exercises', async (request, response) =>{
     }
 })
  
-//DELETE EXERCISE
-
-router.route('/:id').delete((req, res) => {
-     try {
-        Exercise.findByIdAndDelete(req.params.id)
-        response.json('exercise deleted.')
+//Get one exercise
+router.get('/exercises/:id', async (request, response) =>{
+       try {
+        const exercise = await Exercise.findById(request.params.id)
+        response.json(exercise)
     } catch (error) {
         console.log(err)
         response.sendStatus(500)
     }
+});
 
-   /* Exercise.findByIdAndDelete(req.params.id)
-    .then(() => ress.json('Exercise deleted.'))
-    .catch(err => res.status(400).json('Error:') + err);*/
-
+router.delete('/exercises/:id', async (request, response) =>{
+       try {
+        const exercise = await Exercise.findByIdAndDelete(request.params.id)
+        response.json('Exercise deleted.')
+    } catch (error) {
+        console.log(err)
+        response.sendStatus(500)
+    }
 });
 
 // UPDATE EXERCISE
+router.put('/exercises/update/:id', async (request, response) =>{
+    try {
+        var query = {"_id": request.params.id};
+        var update = request.body;
+        var options = {new: true};
+        Exercise.findOneAndUpdate(query, update, options, function(err, updatedExercise) {
+            if (err) {
+                console.log('got an error');
+            }
+            response.send(updatedExercise)
+        })
+    } catch(err) {console.log(err)}
 
-router.post('/update/:id', (req, res) => {
-    Exercise.findById(req.params.id)
-    .then(exercise => {
-        exercise.firstName = req.body.firstName;
-        exercise.description = req.body.description;
-        exercise.duration = req.body.duration;
-        exercise.date = Date.parse(req.body.date);
-    })
-    exercise.save()
-    .then(() => res.json('Exercise updated!'))
-    .catch(err => res.status(400).json('Error:' + err));
-});
-
+})    
 //*******TODO*******/
+//Create todos
 
 router.post('/todo', async (req, res) =>{
     console.log(req.body)
@@ -121,7 +127,7 @@ router.post('/todo', async (req, res) =>{
     }
 })
 
-// READ TODO
+// Read todos
 
 router.get('/todos', async (req, res) =>{
     try {
@@ -133,16 +139,57 @@ router.get('/todos', async (req, res) =>{
     }
 })
 
-// delete
-router.route('todos/:id').delete( async (req,res) => {
-    try{
-   const {id} = req.params;
-   const {description} = req.body;
-   const deleteTodo = await todo.delete(
-       {descriptio: req.body});
-       res.json("Todo was deleted!");
+// Get one todos
+
+router.get('/todos/:id', async (request, response) =>{
+       try {
+        const todo = await Todo.findById(request.params.id)
+        response.json(todo)
+    } catch (error) {
+        console.log(err)
+        response.sendStatus(500)
     }
-    catch(err) { console.log(err.message);}
+});
+
+// Update todos
+
+router.put('/todos/update/:id', async (request, response) =>{
+    try {
+        var query = {"_id": request.params.id};
+        var update = request.body;
+        var options = {new: true};
+        Todo.findOneAndUpdate(query, update, options, function(err, updatedTodo) {
+            if (err) {
+                console.log('got an error');
+            }
+            response.send(updatedTodo)
+        })
+    } catch(err) {console.log(err)}
+
+})    
+// Delete todos
+
+router.delete('/todos/:id', async (req, res) =>{
+       try {
+        const deleteTodo = await Todo.findByIdAndDelete(req.params.id)
+        res.json('Todos deleted.')
+    } catch (error) {
+        console.log(err)
+        res.sendStatus(500)
+    }
+});
+
+//SEND MAIL
+router.post('/mail', async (req, res) =>{
+    console.log(req.body)
+    try {
+        const createMail = await Mail.create(req.body)
+        res.json(createMail)
+    } catch (error) {
+        console.log(err)
+        res.sendStatus(500)
+    }
 })
+
 
 module.exports = router;
