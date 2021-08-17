@@ -3,7 +3,7 @@ const router = express.Router()
 const User = require('../models/user')
 const Exercise = require('../models/exercise')
 const Todo = require('../models/todo')
-const Mail = require('../models/mail')
+
 const bcrypt = require('bcrypt')
 
 router.post('/signup', async (request, response) =>{
@@ -180,16 +180,6 @@ router.delete('/todos/:id', async (req, res) =>{
 });
 
 //SEND MAIL
-router.post('/mail', async (req, res) =>{
-    console.log(req.body)
-    try {
-        const createMail = await Mail.create(req.body)
-        res.json(createMail)
-    } catch (error) {
-        console.log(err)
-        res.sendStatus(500)
-    }
-})
 
 
 module.exports = router;
