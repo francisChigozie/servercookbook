@@ -23,7 +23,7 @@ mongoose.connection.on('error', err => {
 
 app.use(express.json())
 app.use(cors({
-  origin: "http://localhost:3000"
+  origin: "https://projectcontentful.netlify.app/"
 }))
 
 app.use('/login', (req, res) => {
