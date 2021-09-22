@@ -9,18 +9,22 @@ const cors = require('cors')
 dotenv.config()
 
 
-mongoose.connect(process.env.DATA_BASE_ACCESS, (error,result) =>{
+mongoose.connect(process.env.DATA_BASE_ACCESS, {
+  useNewUrlParser: true, useUnifiedTopology: true
+}, (error,result) =>{
     if(error){
         console.log(error)
     }
     console.log("Database connected")
-})
+});
 mongoose.connection.on('error', err => {
   console.log(err);
 });
 
 app.use(express.json())
-app.use(cors())
+app.use(cors({
+  origin: "http://localhost:3000"
+}))
 
 app.use('/login', (req, res) => {
   res.send({
