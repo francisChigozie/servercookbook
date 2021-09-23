@@ -44,13 +44,31 @@ router.delete('/users/:id', async (request, response) =>{
 
 // get all users
 router.get('/users', async (request, response) =>{
-    try {
+    try{
+     const user = await User.find(request.body, (err, user) => {
+        if(err) {
+         response.status(500)
+         response.send('Error:', err);
+       }else if(user[0] === -1) {
+         response.send('No user found !');
+       }else{
+           response.json(user)
+       }
+    })
+         
+    }catch(err){
+        console.error(err.message)
+        response.sendStatus(500)
+    } 
+
+   /* try {
         const user = await User.find(request.body)
         response.json(user)
     } catch (error) {
         console.log(error)
         response.sendStatus(500)
-    }
+    }*/
+
 })
 
 //make a login(user)
