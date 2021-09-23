@@ -32,6 +32,6 @@ app.use('/login', (req, res) => {
   });
 });
 
-app.get("/",(req,res)=>res.send("api is working! hello!"))
-app.use('/app', routesurls)
+//app.get("/",(req,res)=>res.send("api is working! hello!"))
+app.use('/', routesurls)
 app.listen(4000, () => console.log("server is up and running on 4000"))
