@@ -7,6 +7,7 @@ const routesurls = require('./routes/routes')
 const cors = require('cors')
 
 dotenv.config()
+const PORT = process.env.PORT || 4000;
 
 
 mongoose.connect(process.env.DATA_BASE_ACCESS, {
@@ -32,6 +33,6 @@ app.use('/login', (req, res) => {
   });
 });
 
-//app.get("/",(req,res)=>res.send("api is working! hello!"))
+app.get("/",(req,res)=>res.send("api is working! hello!"))
 app.use('/', routesurls)
-app.listen(4000, () => console.log("server is up and running on 4000"))
+app.listen(PORT, () => console.log("server is up and running on " + PORT))
