@@ -24,7 +24,7 @@ mongoose.connection.on('error', err => {
 
 app.use(express.json())
 app.use(cors({
-  origin: "https://projectcontentful.netlify.app/"
+  origin: "https://projectcontentful.netlify.app"
 }))
 
 app.use('/login', (req, res) => {
@@ -33,6 +33,6 @@ app.use('/login', (req, res) => {
   });
 });
 
-app.get("/",(req,res)=>res.send("api is working! hello!"))
+//app.get("/",(req,res)=>res.send("api is working! hello!"))
 app.use('/', routesurls)
 app.listen(PORT, () => console.log("server is up and running on " + PORT))
