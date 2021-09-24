@@ -5,6 +5,7 @@ const Exercise = require('../models/exercise')
 const Todo = require('../models/todo')
 const Mail = require('../models/mail')
 
+const sendmail = require('./sendmail.js')
 const bcrypt = require('bcrypt')
 const { json } = require('express')
 
@@ -121,28 +122,17 @@ router.get('/exercises/:id', async (request, response) =>{
 });
 
 // UPDATE EXERCISE
-router.put('/exercises/update/:id', async (req, res) => {
-    var body = req.params.id;
-    Exercise.findOne({body:body}, (err, exercises) => {
-        if(err) {
-         res.status(500)
-         res.send('Error:', err);
-       }else if(!exercises) {
-         res.send('No exercise found ' + body);
-       }else{
-           exercises= req.body.id;
-           exercises.save((err) => {
-               if(err) {
-                   res.type('html').status(500)
-                   res.send('Error:', err)
-               }else{
-               res.json('updated', exercises);
-       
-               }
-           })
-        }
-    })
-
+router.put('/exercises/:id', async(req, res) => {
+    const requestedId = req.params.id;
+ try{
+      const exercise = await Exercise.findOneAndUpdate({where: {id: requestedId},
+        firstName : req.body.firstName,
+        duration : req.body.duration,
+       });
+         res.send('exercise updated') ;
+         
+    }catch (err) { console.error(err.message) } 
+      
 })
 /*router.put(`/exercises/update/:id`, async (request, response) =>{
    try {
@@ -151,13 +141,16 @@ router.put('/exercises/update/:id', async (req, res) => {
         const{firstName,description,duration,date} = update;
         console.log(update,query)
         var options = {new: true};
-        Exercise.findOne(query, update, options, function(err, updatedExercise) {
+       const exercise =  await Exercise.findOne(query, update, options,
+             function(err, exercise) {
             if (err) {
                 console.log('got an error',err);
             }
-           response.json(updatedExercise)
-        
+           response.json(exercise)
+           exercise.save();
+           response.send('exercise updated') ;
         })
+
     } catch(err) {console.log(err)}
 }) */
 
@@ -210,21 +203,18 @@ router.get('/todos/:id', async (request, response) =>{
 
 // Update todos
 
-router.put('/todos/update/:id', async (request, response) =>{
-    try {
-        var query = {"_id": request.params.id};
-        var update = request.body;
-        console.log(update,query)
-        var options = {new: true};
-        Todo.findOneAndUpdate(query, update, options, function(err, updatedTodo) {
-            if (err) {
-                console.log('got an error',err);
-            }
-            response.send(updatedTodo)
-        })
-    } catch(err) {console.log(err)}
-
-})    
+router.put('/todos/:id', async(req, res) => {
+ try{
+      const requestedId = req.params.id;
+      const todo = await Todo.findOne({where: {id: requestedId}});
+      todo.description = req.body.description;
+      todo.date = req.body.date;
+    
+      await todo.save();
+      res.send('todo updated') ;
+    }
+      catch (err) { console.error(err.message) }  
+})
 // Delete todos
 
 router.delete('/todos/:id', async (req, res) =>{
@@ -242,6 +232,8 @@ router.delete('/todos/:id', async (req, res) =>{
 router.post('/mail', async (request, response) =>{
     console.log(request.body)
     try {
+        const {email} = req.body;
+              sendmail(email)
         const createMail = await Mail.create(request.body)
         response.json(createMail)
     } catch (error) {
