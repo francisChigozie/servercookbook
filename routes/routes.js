@@ -135,25 +135,6 @@ router.put('/exercises/update/:id', async(req, res) => {
     }catch (err) { console.error(err.message) } 
       
 })
-/*router.put(`/exercises/update/:id`, async (request, response) =>{
-   try {
-        var query = {'id': request.params.id};
-        var update = request.body;
-        const{firstName,description,duration,date} = update;
-        console.log(update,query)
-        var options = {new: true};
-       const exercise =  await Exercise.findOne(query, update, options,
-             function(err, exercise) {
-            if (err) {
-                console.log('got an error',err);
-            }
-           response.json(exercise)
-           exercise.save();
-           response.send('exercise updated') ;
-        })
-
-    } catch(err) {console.log(err)}
-}) */
 
 router.delete('/exercises/:id', async (request, response) =>{
        try {
@@ -204,14 +185,12 @@ router.get('/todos/:id', async (request, response) =>{
 
 // Update todos
 
-router.put('/todos/:id', async(req, res) => {
+router.put('/todos/update/:id', async(req, res) => {
+    const requestedId = req.params.id;
  try{
-      const requestedId = req.params.id;
-      const todo = await Todo.findOne({where: {id: requestedId}});
-      todo.description = req.body.description;
-      todo.date = req.body.date;
-    
-      await todo.save();
+      const todo = await Todo.findOneAndUpdate({where: {id: requestedId},
+        description : req.body.description,
+    });
       res.send('todo updated') ;
     }
       catch (err) { console.error(err.message) }  
