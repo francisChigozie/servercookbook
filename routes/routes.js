@@ -122,7 +122,7 @@ router.get('/exercises/:id', async (request, response) =>{
 });
 
 // UPDATE EXERCISE
-router.put('/exercises/:id', async(req, res) => {
+router.put('/exercises/update/:id', async(req, res) => {
     const requestedId = req.params.id;
  try{
       const exercise = await Exercise.findOneAndUpdate({where: {id: requestedId},

@@ -15,10 +15,10 @@ function sendmail(email){
     var mailOptions = {
         from: 'cyriacus1210@gmail.com',
         to: email,
-        subject: 'Complete your Gospel Forum Appointment',
-        html: "<h3>Please click on the link below to complete the process:</h3><br>" +
-    "</a><br><a href='https://cookbook-qrcode.herokuapp.com'>Generate your QR-Code here</a><br><br>" +
-        "From the Management:<br>Franksoft Inc GmbH<br>74074 - Heilbronn<br>Germany"
+        subject: 'Thank You For Visiting My Portfolio',
+        html: "<h3>Please click on the link below  to my Github:</h3><br>" +
+    "</a><br><a href='https://github.com/francisChigozie'>For more details</a><br><br>" +
+        "Freelancer Management:<br>Fit Security<br>Germany"
     };
 
     transporter.sendMail(mailOptions, function(error, info){
