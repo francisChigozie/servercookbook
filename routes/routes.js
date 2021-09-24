@@ -127,10 +127,11 @@ router.put('/exercises/:id', async(req, res) => {
  try{
       const exercise = await Exercise.findOneAndUpdate({where: {id: requestedId},
         firstName : req.body.firstName,
+        description : req.body.description,
         duration : req.body.duration,
        });
          res.send('exercise updated') ;
-         
+
     }catch (err) { console.error(err.message) } 
       
 })
