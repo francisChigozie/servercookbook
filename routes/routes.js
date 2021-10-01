@@ -123,12 +123,10 @@ router.get('/exercises/:id', async (request, response) =>{
 
 // UPDATE EXERCISE
 router.put('/exercises/update/:id', async(req, res) => {
-    const requestedId = req.params.id;
  try{
-      const exercise = await Exercise.findOneAndUpdate({where: {id: requestedId},
-        firstName : req.body.firstName,
-        description : req.body.description,
-        duration : req.body.duration,
+      const exercise = await Exercise.findByIdAndUpdate(req.params.id,req.body,{
+        new: true,
+        runValidators: true
        });
          res.send('exercise updated') ;
 
@@ -165,7 +163,7 @@ router.get('/todos', async (req, res) =>{
     try {
         const cookTodo = await Todo.find(req.body)
         res.json(cookTodo)
-    } catch (error) {
+    } catch (err) {
         console.log(err)
         res.sendStatus(500)
     }
@@ -186,12 +184,12 @@ router.get('/todos/:id', async (request, response) =>{
 // Update todos
 
 router.put('/todos/update/:id', async(req, res) => {
-    const requestedId = req.params.id;
  try{
-      const todo = await Todo.findOneAndUpdate({where: {id: requestedId},
-        description : req.body.description,
-    });
-      res.send('todo updated') ;
+      const todo = await Todo.findByIdAndUpdate(req.params.id, req.body, {
+         new: true,
+         runValidators: true  });
+         
+        res.send('todo updated') ;
     }
       catch (err) { console.error(err.message) }  
 })
