@@ -86,11 +86,7 @@ router.get('/users/', async (request,response) =>{
 router.post('/exercise', async (request, response) =>{
     console.log(request.body)
     try {
-        const createExercise = await Exercise.create({
-            firstName: request.body.firstName,
-            description: request.body.description,
-            duration: request.body.duration
-        })
+        const createExercise = await Exercise.create(request.body)
         response.json(createExercise)
     } catch (error) {
         console.log(error)
@@ -210,7 +206,7 @@ router.delete('/todos/:id', async (req, res) =>{
 router.post('/mail', async (request, response) =>{
     console.log(request.body)
     try {
-        const {email} = req.body;
+        const {email} = request.body;
               sendmail(email)
         const createMail = await Mail.create(request.body)
         response.json(createMail)

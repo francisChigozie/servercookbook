@@ -3,25 +3,30 @@ var nodemailer = require('nodemailer');
 require('dotenv').config();
 
 var transporter = nodemailer.createTransport({
-  service: 'gmail',
-  auth: {
-    user: 'cyriacus1210@gmail.com',
-    pass: process.env.NODEMAILER_PASSWORD
+    host: 'smtp-relay.sendinblue.com',
+     port: 587,
+     secure: false,
+     auth: {
+         user: 'cyriacus1210@gmail.com',
+         pass: '1MEYrXzsO6ngTH7R'
+  },
+  tls:{
+      rejectUnauthorized: false
   }
 });
 
-function sendmail(email){
+ async function  sendmail(email){
 
     var mailOptions = {
         from: 'cyriacus1210@gmail.com',
         to: email,
         subject: 'Thank You For Visiting My Portfolio',
-        html: "<h3>Please click on the link below  to my Github:</h3><br>" +
+        text: "<h3>Please click on the link below  to my Github:</h3><br>" +
     "</a><br><a href='https://github.com/francisChigozie'>For more details</a><br><br>" +
         "Freelancer Management:<br>Fit Security<br>Germany"
     };
 
-    transporter.sendMail(mailOptions, function(error, info){
+     await transporter.sendMail(mailOptions, function(error, info){
         if (error) {
             console.log(error);
         } else {
@@ -29,4 +34,5 @@ function sendmail(email){
         }
     });
 }
+
 module.exports = sendmail;
